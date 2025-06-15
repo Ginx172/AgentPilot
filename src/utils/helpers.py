@@ -380,24 +380,23 @@ def get_all_children(widget):
 
 @contextmanager
 def block_signals(*widgets, recurse_children=True):
-    """Context manager to block signals for a widget and all its child pages."""
+    """Context manager to temporarily block signals on widgets."""
     all_widgets = []
+    prev_states = {}
     try:
-        # Get all child pages
         for widget in widgets:
             all_widgets.append(widget)
             if recurse_children:
                 all_widgets.extend(get_all_children(widget))
 
-        # Block signals
         for widget in all_widgets:
+            prev_states[widget] = widget.signalsBlocked()
             widget.blockSignals(True)
 
         yield
     finally:
-        # Unblock signals
         for widget in all_widgets:
-            widget.blockSignals(False)
+            widget.blockSignals(prev_states.get(widget, False))
 
 
 @contextmanager
