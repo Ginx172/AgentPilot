@@ -1,7 +1,10 @@
 import sys
 import time
 import unittest
-import pyautogui
+import pytest
+
+pytest.importorskip('pyautogui')
+pytest.importorskip('PySide6')
 
 from PySide6.QtGui import Qt
 from PySide6.QtWidgets import QApplication
